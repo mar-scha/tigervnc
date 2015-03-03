@@ -145,7 +145,12 @@ static double runTest(const char *fn)
   CConn *cc;
   double time;
 
-  cc = new CConn(fn);
+  try {
+    cc = new CConn(fn);
+  } catch (rdr::Exception e) {
+    fprintf(stderr, "Failed to open rfb file: %s\n", e.str());
+    exit(1);
+  }
 
   try {
     while (true)
@@ -211,7 +216,7 @@ int main(int argc, char **argv)
   sort(dev, runCount);
   meddev = dev[runCount/2];
 
-  printf("CPU time: %g s (+/- %g %)\n", median, meddev);
+  printf("CPU time: %g s (+/- %g %%)\n", median, meddev);
 
   return 0;
 }
